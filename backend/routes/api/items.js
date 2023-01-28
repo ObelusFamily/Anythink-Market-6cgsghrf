@@ -1,3 +1,4 @@
+const  OpenAI = require("../../lib/openai")
 var router = require("express").Router();
 var mongoose = require("mongoose");
 var Item = mongoose.model("Item");
@@ -137,15 +138,18 @@ router.get("/feed", auth.required, function(req, res, next) {
   });
 });
 
-router.post("/", auth.required, function(req, res, next) {
+router.post("/", auth.required,  function(req, res, next) {
   User.findById(req.payload.id)
-    .then(function(user) {
+    .then(async function(user) {
       if (!user) {
         return res.sendStatus(401);
       }
 
       var item = new Item(req.body.item);
-
+      if (!req.body.item.image) {
+        let image = await (new OpenAI).generateImage(req.body.item.title)
+        item.image = image;
+      }
       item.seller = user;
 
       return item.save().then(function() {
@@ -168,7 +172,7 @@ router.get("/:item", auth.optional, function(req, res, next) {
       return res.json({ item: req.item.toJSONFor(user) });
     })
     .catch(next);
-});
+}); 
 
 // update item
 router.put("/:item", auth.required, function(req, res, next) {
