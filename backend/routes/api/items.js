@@ -91,7 +91,6 @@ router.get("/", auth.optional, function(req, res, next) {
             })
           ),
           itemsCount: itemsCount,
-          isVerified: user.isVerified
         });
       });
     })
