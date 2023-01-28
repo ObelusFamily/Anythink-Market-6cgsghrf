@@ -90,7 +90,8 @@ router.get("/", auth.optional, function(req, res, next) {
               return item.toJSONFor(user);
             })
           ),
-          itemsCount: itemsCount
+          itemsCount: itemsCount,
+          isVerified: user.isVerified
         });
       });
     })
