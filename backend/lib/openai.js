@@ -7,7 +7,7 @@ class OpenAI {
             size: "256x256"
         }, {
             headers:{
-                'Authorization': 'Bearer ' + OPENAI_API_KEY 
+                'Authorization': 'Bearer ' + process.env.OPENAI_API_KEY 
               }
         })
         return response.data.data[0]['url'];
