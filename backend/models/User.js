@@ -29,10 +29,6 @@ var UserSchema = new mongoose.Schema(
       enum: ["user", "admin"],
       default: "user"
     },
-    isVerified: {
-      type: Boolean,
-      default: false
-    },
     favorites: [{ type: mongoose.Schema.Types.ObjectId, ref: "Item" }],
     following: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
     hash: String,
@@ -79,8 +75,7 @@ UserSchema.methods.toAuthJSON = function() {
     token: this.generateJWT(),
     bio: this.bio,
     image: this.image,
-    role: this.role,
-    isVerified: this.isVerified
+    role: this.role
   };
 };
 
@@ -90,9 +85,7 @@ UserSchema.methods.toProfileJSONFor = function(user) {
     bio: this.bio,
     image:
       this.image || "https://static.productionready.io/images/smiley-cyrus.jpg",
-    following: user ? user.isFollowing(this._id) : false,
-    isVerified: this.isVerified,
-
+    following: user ? user.isFollowing(this._id) : false
   };
 };
 
